@@ -1,0 +1,386 @@
+
+<style type="text/css">
+  .card{
+    border: 4px solid white;
+    border-top-left-radius: 9px;
+    border-bottom-left-radius: 9px;
+    background-color:#efe9e9;
+    margin-bottom: 2px;
+    transition: transform .2s;
+    box-shadow: 5px 10px 8px #888888;
+    /*box-shadow: 0 4px 0px 0 rgba(0, 0, 0, 0.1); */
+  }
+  img{
+    border-radius: 9px;
+  }
+
+  .btn-secondary{
+    border :1px solid #3c5899 ;
+    color:#3c5899;
+  }
+
+  .btn-secondary:hover{
+    background-color:  #3c5899 ;
+    color: white;
+  }
+
+  .btn-secondary:active {
+    background-color:  white;
+    color:#3c5899;
+  }
+
+  .card:hover {
+    transform: scale(0.95);
+  }
+
+  body{
+    background-color: #d6bfbf24
+  }
+
+  .menu {
+    color: #9e9191;
+    transition: transform .2s;
+  }
+
+  .menu:hover {
+    color: #3c5899;
+    transform: scale(1.2);
+  }
+
+  .menu:active {
+    color: #9e9191;
+    transform: scale(1.05);
+  }
+
+  .page-link:hover{
+    background-color:  #3c5899 ;
+    color: white;
+  }
+
+  .page-link:active{
+    background-color: white ;
+    color:#3c5899;
+  }
+
+  .position-absolute{
+    bottom:10px;
+
+  }
+
+  img.like{
+    transition: transform .2s;
+
+  }
+  img.like:hover{
+    transform: scale(1.1);
+  }
+
+  img.like:active{
+    transform: scale(0.5);
+  }
+
+  .tabcontent {
+    display: none;
+  }
+
+  .fancy {
+    line-height: 1;
+    text-align: center;
+  }
+
+  .fancy span {
+    display: inline-block;
+    position: relative;
+  }
+
+  .fancy span:before,.fancy span:after {
+    position: absolute;
+    height: 5px;
+    border-bottom: 1px solid white;
+    border-top: 1px solid white;
+    top: 0;
+    width: 600px;
+  }
+
+  .fancy span:before {
+    right: 100%;
+    margin-right: 15px;
+  }
+
+  .fancy span:after {
+    left: 100%;
+    margin-left: 15px;
+  }
+
+  img.album{
+    position:absolute;
+    border :1px solid white;
+    height:200px;
+    width:200px;
+    bottom: 40px;
+    top:40px;
+    margin-left:20px;
+  }
+
+  img.photo{
+    border :2px solid white;
+    height: 276px;
+    width: 250px;
+    margin-left:0;
+
+  }
+
+  img.modalAlbum{
+    width: 100%;
+    height:500px;
+    border-radius:10px;
+  }
+
+  img.modalPhoto{
+    width: 100%;
+    height:500px;
+    border-radius:10px;
+  }
+
+  .upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    width : 180px;
+    height: 180px;
+  }
+
+  button.btn {
+    width:100%;
+    height: 100%;
+    border: 3px dashed #a78f8f;
+    color: gray;
+    background-color: #d6bfbf24;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .upload-btn-wrapper input[type=file] {
+    font-size: 600px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+  }
+
+  input.btn {
+    background-color: green;
+    color: white;
+    transition: transform .2s;
+  }
+
+  input.btn:hover{
+    background-color: #0080008f;
+    transform: scale(1.1);
+  }
+
+  input.btn:active{
+    background-color: #0080008f;
+    transform: scale(1.05);
+  }
+
+  a.a{
+    background-color: red;
+    color: white;
+    transition: transform .2s;
+  }
+
+  a.a:hover{
+    background-color: #ff0000a8;
+    color: white;
+    transform: scale(1.1);
+  }
+
+  a.a:active{
+    background-color: #ff0000a8;
+    color: white;
+    transform: scale(1.05);
+  }
+  .upload-btn-wrapper:hover{
+    transition: transform .2s;
+    transform: scale(0.95);
+  }
+  .img_wrp {
+    display: inline-block;
+    position: relative;
+  }
+  .closes {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  @media only screen and (max-width: 990px) {
+    img.album{
+      position:absolute;
+      border :1px solid white;
+      height: 180px;
+      width:180px;
+      margin-left:25px;
+      bottom: 60px;
+      top:35px;
+    }
+  }
+</style>
+<!-- HEADER -->
+<header>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-5 col-md-7">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-3 col-lg-3">
+              <a class="navbar-brand text-white   mr-2 header float-right" style="height:45px;" href="<%= root_path %>"><b>Fotobook</b></a>
+            </div>
+
+            <div class="col-sm-9 col-lg-9">
+              <input class="form-control mt-1 h-75" type="search" placeholder="Search Photo/Album" aria-label="Search">
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-5 col-md-5">
+        <ul class="nav nav-pills float-right">
+
+
+          <%  if !current_user.nil? %>
+
+          <li class="nav-item">
+            <div class="d-flex  align-items-center header" style="height:45px;">
+
+              <img src="<%=current_user.avatar.url(:thumb) %>" class="rounded-circle mr-1" style=" width: 37px; height: 37px">
+              <a class="nav-link text-white p-1 mr-md-3 "style="font-size: 14px" href="/userProfile"><b> <%=current_user.first_name.to_s%></b></a>
+            </div>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link text-white header pt-2" style="height:45px;   font-size: 17px" data-method="DELETE" href="<%= destroy_user_session_path %>"><b>Log out</b> </a>
+          </li>
+          <%   else  %>
+          <li class="nav-item">
+            <div class="d-flex  align-items-center header" style="height:45px;">
+            </div>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link text-white header pt-2" style="height:45px;   font-size: 17px" href="/signin"><b>Log In</b></a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link text-white header pt-2" datastyle="height:45px;   font-size: 17px" data-method="GET" href="<%= new_user_registration_path %>"><b>Sign Up</b></a>
+          </li>
+          <% end %>
+
+
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+<br class="m-2">
+
+<!-- MAIN -->
+<main>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-3 col-lg-2">
+        <ul class="nav flex-column ml-sm-5">
+          <li class="nav-item">
+            <a class="nav-link menu"  href="<%= root_path %>"><b>Feeds</b></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link menu" href="/discover"><b>Discover</b></a>
+          </li>
+
+        </ul>
+      </div>
+
+      <div class="col-sm-8 col-lg-9" style="background-color: white">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <h5 class="pt-4">New Photo</h5>
+              <hr>
+            </div>
+          </div>
+          <%= form_with model: @photo, controller: 'photos',action: 'edit', local: true, method: 'put' do |f|%>
+          <% if @photo.errors.any? %>
+          <div id="error_explanation">
+            <h2>
+              <%= "#{pluralize(@photo.errors.count, "error")} prohibited this photo from being saved:" %>
+            </h2>
+            <ul>
+              <% @photo.errors.full_messages.each do |msg| %>
+              <li>
+                <%= msg %>
+              </li>
+              <% end %>
+            </ul>
+          </div>
+          <% end %>
+
+
+          <form>
+            <div class="row">
+              <div class="col-12 col-lg-6">
+                <div class="form-group">
+                  <label>Title</label>
+                  <%= f.text_field :title, class: 'form-control',placeholder: "Photo Title" %>
+                </div>
+
+                <div class="form-group w-50">
+                  <label>Sharing Mode</label>
+                    <!-- <select class="form-control">
+                      <option selected>Public</option>
+                      <option>Private</option>
+                    </select> -->
+                    <%= f.select :sharing_mode, options_for_select([['Public', true], ['Private', false]]), class: 'form-control' %>
+                </div>
+              </div>
+
+              <div class=" col-12 col-lg-6">
+                <div class="form-group">
+                  <label>Description</label>
+                  <!-- <textarea class="form-control"rows="6" placeholder="Album Description"></textarea> -->
+                    <%= f.text_area(:description,class: "form-control",rows: "6", placeholder: "Album Description") %>
+                </div>
+              </div>
+              </div>
+                <div class="row">
+                  <div class="col images m-3">
+                    <div class="upload-btn-wrapper mt-2 float-left" id="addImg" style="display: none">
+                      <button class="btn"><img src="/assets/plus.png" style="width: 50px;"></button>
+                      <%= f.file_field :image, class: 'form-control', onchange: 'showImage.call(this)' %>
+                    </div>
+                    <div class="img float-left mt-2 mr-1">
+                      <div ng-repeat="file in imagefinaldata" class="img_wrp">
+                        <img style="height: 180px;width:180px" src="<%=@photo.image.url%>" class="imgResponsiveMax" alt="" />
+                        <img class="closes m-1" src="/assets/cl.png" onClick="click()"style="width:30px; height: 30px;" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-5 m-2 mb-3 ">
+                  <%= f.submit 'Saving', class: 'btn mr-2', type: "submit", value:"Save"%>
+
+                  <%= link_to 'Delete', photo_path(@photo), class: 'a btn btn-danger', method: :delete, data: {confirm: 'Are you sure?'} %>
+                </div>
+              </div>
+            </form>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>

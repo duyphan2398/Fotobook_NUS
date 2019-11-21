@@ -1,0 +1,291 @@
+<style type="text/css">
+  body{
+    background-color: #d6bfbf24
+  }
+
+  .menu {
+    color: #9e9191;
+    transition: transform .2s;
+  }
+
+  .menu:hover {
+    color: #3c5899;
+    transform: scale(1.2);
+  }
+
+  .menu:active {
+    color: #9e9191;
+    transform: scale(1.05);
+  }
+  .input-file-container {
+    position: relative;
+    width: 100px;
+  }
+  .js .input-file-trigger {
+    border-radius: 5px;
+    display: block;
+    padding: 5px 5px;
+    margin-top: 160px;
+    margin-left: 65px;
+    position: absolute;
+    z-index: 2;
+    background: white;
+    color: black;
+    font-size: 1em;
+    transition: all .4s;
+    cursor: pointer;
+    opacity: 0.4;
+  }
+  .js .input-file {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100px;
+    opacity: 0;
+    padding: 14px 0;
+    cursor: pointer;
+  }
+  .js .input-file:hover + .input-file-trigger,
+  .js .input-file:focus + .input-file-trigger,
+  .js .input-file-trigger:hover,
+  .js .input-file-trigger:focus {
+    background: white;
+    opacity: 0.8;
+  }
+
+</style>
+
+
+
+<script type="text/javascript">
+  document.querySelector("html").classList.add('js');
+  function showImage(){
+    if(this.files && this.files[0])
+    {
+      var obj = new FileReader();
+      obj.onload = function(data){
+        var image = document.getElementById("image");
+        image.src = data.target.result;
+        image.style.display = "block"
+      }
+      obj.readAsDataURL(this.files[0]);
+
+    }
+  }
+
+  $(document).ready(function(){
+
+
+    $('a#btnFollow').click(function(){
+      if($(this).text() == "Follow"){
+        $(this).html("<b>Following</b>");
+        $(this).css("background-color", "#ffc107");
+        $(this).css("border-color", "white");
+        $(this).css("color", "white");
+      }else{
+        $(this).html("<b>Follow</b>");
+        $(this).css("background-color", "white");
+        $(this).css("border-color", "#ffc107");
+        $(this).css("color", "#ffc107");
+      }
+    });
+  });
+
+
+
+
+</script>
+
+<header>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-5 col-md-7">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-3 col-lg-3">
+              <a class="navbar-brand text-white   mr-2 header float-right" style="height:45px;" href="<%= root_path %>"><b>Fotobook</b></a>
+            </div>
+
+            <div class="col-sm-9 col-lg-9">
+              <input class="form-control mt-1 h-75" type="search" placeholder="Search Photo/Album" aria-label="Search">
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-5 col-md-5">
+        <ul class="nav nav-pills float-right">
+
+
+          <%  if !current_user.nil? %>
+          <li class="nav-item">
+            <div class="d-flex  align-items-center header" style="height:45px;">
+              <img src="<%=current_user.avatar.url(:thumb) %>" class="rounded-circle mr-1" style=" width: 37px; height: 37px">
+              <a class="nav-link text-white p-1 mr-md-3 "style="font-size: 14px" href="/userProfile"><b> <%=current_user.first_name.to_s%></b></a>
+            </div>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link text-white header pt-2" style="height:45px;   font-size: 17px" data-method="DELETE" href="<%= destroy_user_session_path %>"><b>Log out</b> </a>
+          </li>
+          <%   else  %>
+          <li class="nav-item">
+            <div class="d-flex  align-items-center header" style="height:45px;">
+            </div>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link text-white header pt-2" style="height:45px;   font-size: 17px" href="/signin"><b>Log In</b></a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link text-white header pt-2" datastyle="height:45px;   font-size: 17px" data-method="GET" href="<%= new_user_registration_path %>"><b>Sign Up</b></a>
+          </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>
+<br>
+<main>
+  <div class="container-fluid">
+    <div class="row ">
+      <div class="col-sm-3 col-lg-2">
+        <ul class="nav flex-column ml-sm-5">
+          <li class="nav-item">
+            <a onclick="openTab(event, 'PHOTO')"class="nav-link menu"  href="#"><b>Feeds</b></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link menu" href="/discover"><b>Discover</b></a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-sm-8 col-lg-9" style="background-color: white">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <h5 class="pt-4">Edit User Profile</h5>
+              <hr>
+              <%= form_for(resource, as: resource_name,url: registration_path(resource_name), html: { method: :put }) do |f| %>
+              <%= devise_error_messages! %>
+              <form >
+                <div class="form-group row">
+                  <div class="col-md-3"></div>
+                  <div class="col-md-5" style="  height: 210px;">
+                    <div class="input-file-container" style="display: block;">
+                      <img class="rounded-circle" src="<%=current_user.avatar.url(:thumb) %>" width="200px" height="200px" style="position: absolute; z-index: 0;" id="image" >
+
+                      <%= f.file_field :avatar,class: "input-file", id: "my-file" ,style: "position: absolute; z-index: 10; margin-top: 160px;", onchange: "showImage.call(this);" %>
+                      <label tabindex="0" for="my-file" class="input-file-trigger">CHANGE</label>
+
+
+
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="col-md-3"></div>
+                  <div class="col-md-5">
+                    <h4 class="text-primary">Basic information</h4>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="editFirstName" class="col-md-3 col-form-label d-flex justify-content-end"><b>First name</b></label>
+                  <div class="col-md-5">
+                    <!-- <input type="text" class="form-control" id="editFirstName" placeholder="First Name" value=<%=@user.first_name%>> -->
+
+                    <%= f.text_field :first_name, class: 'form-control',placeholder: 'First Name'%>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="editLastName" class="col-md-3 col-form-label d-flex justify-content-end"><b>Last name</b></label>
+                  <div class="col-md-5">
+                    <!-- <input type="text" class="form-control" id="editLastName" placeholder="Last Name"> -->
+                    <%= f.text_field :last_name, class: 'form-control',placeholder: 'Last Name', value: @user.last_name%>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="editEmail" class="col-md-3 col-form-label d-flex justify-content-end"><b>Email</b></label>
+                  <div class="col-md-5">
+                    <!-- <input type="Email" class="form-control" id="editEmail" placeholder="Someone@example.com"> -->
+                    <%= f.text_field :email, class: 'form-control',placeholder: 'Email', value: @user.email%>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <div class="col-md-3"></div>
+                  <div class="col-md-5">
+                    <!-- <button type="submit" class="btn btn-success">Save</button> -->
+                    <%= f.submit 'Save', class: 'btn btn-success' %>
+
+                  </div>
+                </div>
+              </form>
+              <% end %>
+              <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+              <%= devise_error_messages! %>
+              <form class="pl-5 ml-lg-5">
+                <div class="form-group row">
+                  <div class="col-md-3"></div>
+                  <div class="col-md-5">
+                    <h4 class="text-primary">Change password</h4>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="currentPsw" class="col-md-3 col-form-label d-flex justify-content-end"><b>Current Password</b></label>
+                  <div class="col-md-5">
+
+                    <%= f.password_field :current_password, class: 'form-control',placeholder: 'Current Password',placeholder: "**********"%>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="newPsw" class="col-md-3 col-form-label d-flex justify-content-end"><b>New Password</b></label>
+                  <div class="col-md-5">
+                   <%= f.password_field :password, class: 'form-control',placeholder: 'New Password',placeholder: "**********"%>
+
+                 </div>
+               </div>
+               <div class="form-group row">
+                <label for="verifyPsw" class="col-md-3 col-form-label d-flex justify-content-end"><b>Verify Password</b></label>
+                <div class="col-md-5">
+                 <%= f.password_field :password_confirmation, class: 'form-control',placeholder: 'Verify Password',placeholder: "**********"%>
+
+               </div>
+             </div>
+             <div class="form-group row">
+              <div class="col-md-3"></div>
+              <div class="col-md-5">
+                <%= f.submit 'Save', class: 'btn btn-success' %>
+              </div>
+            </div>
+          </form>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

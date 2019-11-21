@@ -1,0 +1,133 @@
+
+<style type="text/css">
+  body{
+    background-color: white
+  }
+  h1  {
+    color: #3c5899;
+    transition: transform .2s;
+    text-align:center;
+  }
+  h1:hover{
+    transform: scale(1.1);
+  }
+  main{
+    background-color: #d5ccccb5;
+    width: 30%;
+    height: 120%;
+    padding: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 6px;
+    box-shadow: 5px 10px 8px #888888;
+  }
+  input.btn{
+    background-color: #3c5899;
+    color: white;
+    transition: transform .1s;
+  }
+  input.btn:hover{
+    background-color: #5c77b6;
+    transform: scale(1.15);
+  }
+  input.btn:active{
+    background-color: #3c5899;
+    transform: scale(1.05);
+  }
+  .form-control{
+    border: 1px solid #00000000;
+
+  }
+</style>
+
+<header>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-5 col-md-7">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-3 col-lg-3">
+              <a class="navbar-brand text-white   mr-2 header float-right" style="height:45px;" href="<%= root_path %>"><b>Fotobook</b></a>
+            </div>
+
+            <div class="col-sm-9 col-lg-9">
+              <input class="form-control mt-1 h-75" type="search" placeholder="Search Photo/Album" aria-label="Search">
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-5 col-md-5">
+        <ul class="nav nav-pills float-right">
+         <li class="nav-item">
+          <div class="d-flex  align-items-center header" style="height:45px;">
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white header pt-2" style="height:45px;   font-size: 17px" href="<%= new_user_registration_path %>"><b>Sign Up</b></a>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</div>
+</header>
+
+
+<h1 class="mt-5 mb-5">Fotobook Login</h1>
+
+<!-- MAIN -->
+<main>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-1"></div>
+      <div class="col-sm-12 col-lg-10">
+
+        <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+
+
+
+
+
+        <div class="text-center">
+          <img  class="m-2 mb-lg-5" src="/assets/user.png">
+        </div>
+
+
+
+        <div  class="form-group">
+
+          <%= f.email_field :email, autofocus: true, required: true, autocomplete: "email", class: 'form-control',placeholder: 'Email' %>
+          <%= f.password_field :password, required: true, autocomplete: "off", class: 'form-control',placeholder: 'Password' %>
+
+        </div>
+
+        <div class="text-center actions">
+         <%= f.submit 'Log In', class: 'btn mt-3 w-5 mb-4' %>
+
+       </div>
+
+
+       <%  flash.each do |name,msg| %>
+       <%= content_tag :div, msg, class: "alert #{name}" %>
+       <% end %>
+
+
+       <div class="text-center ">
+        <a href="#">Forgot password?</a>
+        <%= render "devise/shared/links" %>
+      </div>
+
+      <% end %>
+    </div>
+
+  </div>
+
+</div>
+
+</main>
+
+<div class="text-center mt-2">
+  <a href="<%= new_user_registration_path %>">Create an account</a>
+</div>

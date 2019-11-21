@@ -1,0 +1,541 @@
+
+<style type="text/css">
+  .follow-button {
+    text-transform: uppercase;
+    border-color: #4090db;
+    color: #4090db;
+    margin-left: 20px;
+    &:visited, &:focus, &:hover {
+      border-color: #2D6396;
+      color: #2D6396;
+    }
+  }
+
+  .unfollow-button {
+    text-transform: uppercase;
+    border-color: #66bd2b;
+    background-color: #66bd2b;
+    color: white;
+    margin-left: 20px;
+    &:visited, &:focus, &:hover {
+      border-color: #47821F;
+      background-color: #47821F;
+      color: white;
+    }
+  }
+
+  body{
+    background-color: #d6bfbf24
+  }
+  a:not([href]):not([tabindex]){
+    color: #9e9191;
+    transition: transform .2s;
+  }
+  a:not([href]):not([tabindex]):hover {
+    color: #3c5899;
+    text-decoration: none;
+    transform: scale(1.2);
+    cursor :pointer;
+  }
+  a:not([href]):not([tabindex]):active {
+    color: #9e9191;
+    transform: scale(1.05);
+  }
+
+  .menu {
+    color: #9e9191;
+    transition: transform .2s;
+
+  }
+  .menu:hover {
+    color: #3c5899;
+    text-decoration: none;
+    transform: scale(1.2);
+    cursor :pointer;
+  }
+  .menu :active {
+    color: #9e9191;
+    transform: scale(1.05);
+  }
+  img.album{
+    position:absolute;
+    border :1px solid white;
+    height:150px;
+    width:150px;
+    align-self: center;
+
+
+
+  }
+  .card{
+    border:1px solid white;
+    border-top-left-radius: 9px;
+    border-bottom-left-radius: 9px;
+    background-color: white;
+    margin-bottom: 2px;
+    margin-top: 3px;
+    transition: transform .2s;
+
+  }
+  .card-following{
+
+
+    border-radius: 9px;
+    background-color:#efe9e9;
+    transition: transform .2s;
+    box-shadow: 5px 10px 8px #888888;
+  }
+  .card:hover {
+    transform: scale(0.95);
+  }
+  .card-following:hover {
+    transform: scale(0.95);
+  }
+  .card-photo{
+    transition: transform .2s;
+  }
+  .card-photo:hover {
+    transform: scale(0.95);
+  }
+  .img_wrp {
+    display: inline-block;
+    position: relative;
+  }
+  .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+
+  .butnedit {
+    -webkit-border-radius: 60;
+    -moz-border-radius: 60;
+    border-radius: 60px;
+    font-family: Arial;
+    color: #001494;
+    font-size: 20px;
+    background: #ffffff;
+    padding: 5px 12px 5px 12px;
+    border: solid #0a0ab0 2px;
+    text-decoration: none;
+  }
+
+  .butnedit:hover {
+    background: #e3e8e5;
+    text-decoration: none;
+  }
+
+  .following {
+    background-image: linear-gradient(to bottom, #eb7c05, #e0c516);
+    border-radius: 60px;
+    font-family: Courier New;
+    color: #ffffff;font-size: 14px;
+    padding-top:  3px;
+    padding-bottom: 3px;
+    padding-right: 5px;
+    padding-left: 5px;
+    transition: transform .2s;
+  }
+  .following {
+    background-image: linear-gradient(to bottom, #eb7c05, #e0c516);
+    border-radius: 60px;
+    font-family: Courier New;
+    color: #ffffff;font-size: 18px;
+    padding-top:  6px;
+    padding-bottom: 6px;
+    padding-right: 10px;
+    padding-left: 10px;
+    transition: transform .2s;
+  }
+  .following:hover {
+    transform: scale(1.2);
+  }
+  .follower {
+    background-image: linear-gradient(to bottom, #eaeaea52, #f7d603);
+    border-radius: 60px;
+    font-family: Courier New;
+    color: #000000;font-size: 19px;
+    padding-top:  5px;
+    padding-bottom: 5px;
+    padding-right: 20px;
+    padding-left: 20px;
+    transition: transform .2s;
+  }
+  .follower:hover {
+    transform: scale(1.2);
+  }
+
+
+
+
+</style>
+<script type="text/javascript">
+  openTab(event,'PHOTOS')
+</script>
+
+<header>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-5 col-md-7">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-3 col-lg-3">
+              <a class="navbar-brand text-white   mr-2 header float-right" style="height:45px;" href="<%= root_path %>"><b>Fotobook</b></a>
+            </div>
+            <div class="col-sm-9 col-lg-9">
+              <input class="form-control mt-1 h-75" type="search" placeholder="Search Photo/Album" aria-label="Search">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-5 col-md-5">
+        <ul class="nav nav-pills float-right">
+          <%  if !current_user.nil? %>
+          <li class="nav-item">
+            <div class="d-flex  align-items-center header" style="height:45px;">
+              <img src="<%=current_user.avatar.url(:thumb) %>" class="rounded-circle mr-1" style=" width: 37px; height: 37px">
+              <a class="nav-link text-white p-1 mr-md-3 "style="font-size: 14px" href="/userProfile"><b> <%=current_user.first_name.to_s%></b></a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white header pt-2" style="height:45px;   font-size: 17px" data-method="DELETE" href="<%= destroy_user_session_path %>"><b>Log out</b> </a>
+          </li>
+          <%   else  %>
+          <li class="nav-item">
+            <div class="d-flex  align-items-center header" style="height:45px;">
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white header pt-2" style="height:45px;   font-size: 17px" href="/signin"><b>Log In</b></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white header pt-2" datastyle="height:45px;   font-size: 17px" data-method="GET" href="<%= new_user_registration_path %>"><b>Sign Up</b></a>
+          </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>
+<br class="m-2">
+<!-- MAIN -->
+<main>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-3 col-lg-2">
+        <ul class="nav flex-column ml-sm-5">
+          <li class="nav-item">
+            <a class="nav-link menu"  href="/feed"><b>Feeds</b></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link menu" href="<%= root_path %>"><b>Discover</b></a>
+          </li>
+
+        </ul>
+      </div>
+      <!-- Feed and Disco -->
+      <div class="col-sm-8 col-lg-9" style="background-color: white">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-3 text-center">
+              <img src="<%=@profileUser.avatar.url(:thumb) %>" class=" rounded-circle mt-4" style="height: 200px; width:200px" alt="Avatar">
+            </div>
+            <div class="col-lg-9 pt-4 float-left text-center text-lg-left">
+              <!--  -->
+              <% if current_user %>
+              <% if current_user.followings.include?(@profileUser) %>
+
+              <button
+              name="button<%=@profileUser.id%>"
+              type="submit"
+              class="follow following "
+              following_id="<%=@profileUser.id%>"
+              follower_id="<%=current_user.id%>"
+              followed="true">
+              Unfollow
+            </button>
+
+            <%else%>
+            <button
+            name="button<%=@profileUser.id%>"
+            type="submit"
+            class="follow follower "
+            following_id="<%=@profileUser.id%>"
+            follower_id="<%=current_user.id%>"
+            followed="false">
+            Follow
+          </button>
+
+          <%end%>
+          <%end%>
+          <!-- <button class="following" id="follow">Following</button> -->
+
+          <h1><%=@profileUser.first_name.to_s + " " +@profileUser.last_name.to_s  %></h1>
+          <!-- <b><a class="menu" href="">1000 PHOTOS</a> | <a  class="menu" href="">1000 ALBUMS</a> | <a   class="menu" href="">1000 FOLLOWINGS</a> | <a   class="menu" href="">1000 FOLLOWERS</a></b> -->
+          <ul class="list-style list-inline">
+            <li class="list-inline-item">
+              <a onclick="openTab(event, 'PHOTOS')" class="tablinks font-weight-bold"><%= @profilePhotos.size %> PHOTOS</b></a>
+            </li>|
+            <li class="list-inline-item">
+              <a onclick="openTab(event, 'ALBUMS')" class="tablinks font-weight-bold" ><%= @profileAlbums.size %> ALBUMS</a>
+            </li>|
+            <li class="list-inline-item">
+              <a onclick="openTab(event, 'FOLLOWINGS')" class="tablinks font-weight-bold"><%= @profileUser.followings.size%> FOLLOWINGS</a>
+            </li>|
+            <li class="list-inline-item">
+              <a onclick="openTab(event, 'FOLLOWERS')" class=" tablinks font-weight-bold"><%= @profileUser.followers.size%> FOLLOWERS</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- PHOTOS -->
+      <div id="PHOTOS" class="tabcontent">
+        <div class="row mt-5">
+          <% if @profilePhotos %>
+          <% @profilePhotos.each do |photo| %>
+          <% if photo.sharing_mode == true %>
+          <div class="img_wrp card-photo col-6 col-lg-3 text-center float-left mb-5" style="height: 200px; width:200px; ">
+            <img src="<%= photo.image.url %>" class="rounded" style="height: 200px; width:200px; ">
+            <p title="title"><%= photo.title %></p>
+          </div>
+          <% end %>
+          <% end %>
+          <% end %>
+        </div>
+      </div>
+      <!-- END PHOTOS -->
+      <!-- ALBUMS -->
+      <div id="ALBUMS" class="tabcontent">
+
+        <div class="row mt-5">
+          <% if @profileAlbums %>
+          <% @profileAlbums.each do |album| %>
+          <% if album.sharing_mode == true %>
+          <div class="col-6 col-lg-3 card float-left text-center mb-5 mt-3" style="width: 18rem; position:relative;">
+            <div style="z-index:10;position: absolute;color: #020101;align-self: center;" class="text-center ">
+              <div style="z-index:11;position: absolute;transform: translate(-50%, -50%);align-self: center; top:80px" >
+                <h1>
+                  <%= album.pics.size %>
+                </h1>
+              </div>
+            </div>
+            <!-- HÌnh mờ  -->
+            <img src="/assets/high.jpeg" class="album card-img-top" style="
+            opacity: 0.25;
+            background-color: #000000;
+            border-radius: 100px ;
+            border: 3px solid white;
+            height: 100px;
+            width: 100px;
+            top: 30px">
+            <% if album.pics.any? %>
+            <% album.pics.each do |pic| %>
+            <%= image_tag pic.image.url(:medium),class: " album card-img-top"%>
+            <% end %>
+            <% end %>
+            <img class="" src="/assets/1.jpg" alt="Card image cap"
+            style=" height:150px;
+            width:150px;
+            align-self: center;">
+            <div class="card-body pt-4">
+              <p class="card-text"><%= album.title %></p>
+            </div>
+          </div>
+          <% end %>
+          <% end %>
+          <% end %>
+        </div>
+      </div>
+      <!-- END ALBUMS -->
+      <!-- FOLLOWINGS -->
+      <div id="FOLLOWINGS" class="tabcontent">
+        <div class="row mt-5">
+
+
+         <% if @profileUser.followings %>
+         <%@profileUser.followings.each do |userFollowing|%>
+
+         <div class="col-6 col-lg-3  mt-3 float-left">
+          <div class="card-following">
+            <div class="container text-center" >
+              <div class="row mt-2 ">
+                <div class="col-12">
+                  <img src="<%=userFollowing.avatar.url()%>" class="card-img-top rounded-circle mt-2 mb-2" style="height: 90px; width:90px;">
+                </div>
+              </div>
+              <div class="row text-center">
+                <div class="col-12">
+                  <% if current_user != userFollowing %>
+                  <a href="../profile/<%=userFollowing.id%>" style="text-decoration: none; color: black">
+                    <% else %>
+                    <a href="../userProfile" style="text-decoration: none; color: black">
+                      <%end%>
+                      <h4 class="card-title">
+                        <%=userFollowing.first_name.to_s%> <%=userFollowing.last_name.to_s%>
+                      </h4>
+                    </a>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <h4>
+                      <%= userFollowing.photos.size %>
+                    </h4>
+                    PHOTOS
+                  </div>
+                  <div class="col-6">
+                    <h4>
+                      <%= userFollowing.albums.size %>
+                    </h4>
+                    ALBUMS
+                  </div>
+                </div>
+                <div class="card-body text-center mb-2">
+                  <% if current_user %>
+                  <% if current_user != userFollowing %>
+                  <% if current_user.followings.include?(userFollowing) %>
+
+                  <button
+                  name="button<%=userFollowing.id%>"
+                  type="submit"
+                  class="follow following ml-2"
+                  following_id="<%=userFollowing.id%>"
+                  follower_id="<%=current_user.id%>"
+                  followed="true">
+                  Unfollow
+                </button>
+
+                <%else%>
+                <button
+                name="button<%=userFollowing.id%>"
+                type="submit"
+                class="follow follower ml-2"
+                following_id="<%=userFollowing.id%>"
+                follower_id="<%=current_user.id%>"
+                followed="false">
+                Follow
+              </button>
+              <%end%>
+              <%else%>
+              <button
+              name="button<%=userFollowing.id%>"
+              type="submit"
+              class="following ml-2"
+              following_id="<%=userFollowing.id%>"
+              follower_id="<%=current_user.id%>"
+              followed="true">
+              You
+            </button>
+            <%end%>
+            <%end%>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% end %>
+    <% end %>
+
+
+
+  </div>
+</div>
+<!-- END FOLOWINGS -->
+<!-- FOLLOWERS -->
+<div id="FOLLOWERS" class="tabcontent">
+  <div class="row mt-5">
+
+
+    <% if @profileUser.followers %>
+    <%@profileUser.followers.each do |userFollower|%>
+
+    <div class="col-6 col-lg-3  mt-3 float-left">
+      <div class="card-following">
+        <div class="container text-center" >
+          <div class="row mt-2 ">
+            <div class="col-12">
+              <img src="<%=userFollower.avatar.url()%>" class="card-img-top rounded-circle mt-2 mb-2" style="height: 90px; width:90px;">
+            </div>
+          </div>
+          <div class="row text-center">
+            <div class="col-12">
+              <% if current_user != userFollower %>
+              <a href="../profile/<%=userFollower.id%>" style="text-decoration: none; color: black">
+                <% else %>
+                <a href="../userProfile" style="text-decoration: none; color: black">
+                  <%end%>
+                  <h4 class="card-title">
+                    <%=userFollower.first_name.to_s%> <%=userFollower.last_name.to_s%>
+                  </h4>
+                </a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <h4>
+                  <%= userFollower.photos.size %>
+                </h4>
+                PHOTOS
+              </div>
+              <div class="col-6">
+                <h4>
+                  <%= userFollower.albums.size %>
+                </h4>
+                ALBUMS
+              </div>
+            </div>
+            <div class="card-body text-center mb-2">
+              <% if current_user %>
+              <% if current_user != userFollower %>
+              <% if current_user.followings.include?(userFollower) %>
+
+              <button
+              name="button<%=userFollower.id%>"
+              type="submit"
+              class="follow following ml-2"
+              following_id="<%=userFollower.id%>"
+              follower_id="<%=current_user.id%>"
+              followed="true">
+              Unfollow
+            </button>
+
+            <%else%>
+            <button
+            name="button<%=userFollower.id%>"
+            type="submit"
+            class="follow follower ml-2"
+            following_id="<%=userFollower.id%>"
+            follower_id="<%=current_user.id%>"
+            followed="false">
+            Follow
+          </button>
+          <%end%>
+          <%else%>
+          <button
+          name="button<%=userFollower.id%>"
+          type="submit"
+          class="following ml-2"
+          following_id="<%=userFollower.id%>"
+          follower_id="<%=current_user.id%>"
+          followed="true">
+          You
+        </button>
+        <%end%>
+        <%end%>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+<% end %>
+
+
+
+</div>
+</div>
+<!-- END FOLLOWERS -->
+</div>
+</div>
+</div>
+</div>
+</main>

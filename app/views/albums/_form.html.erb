@@ -1,0 +1,80 @@
+
+
+<%= simple_form_for(album, html: {multipart: true}) do |f| %>
+              <div class="row">
+                  <div class="col-12 col-lg-6">
+                    <div class="form-group">
+                      <label>Title</label>
+                      <!-- <input type="text" class="form-control" placeholder="Photo Title"> -->
+                      <%= f.text_field :title, class: "form-control", placeholder: "Photo Title" %>
+                    </div>
+
+                    <div class="form-group w-50">
+                      <label>Sharing Mode</label>
+                      <!-- <select class="form-control">
+                        <option selected>Public</option>
+                        <option>Private</option>
+                      </select> -->
+                      <%= f.select :sharing_mode, options_for_select([['Public', true], ['Private', false]]), class: 'form-control' %>
+                    </div>
+
+                  </div>
+
+                  <div class=" col-12 col-lg-6">
+                    <div class="form-group">
+                      <label>Description</label>
+                       <!-- <textarea class="form-control"rows="6" placeholder="Album Description"></textarea> -->
+                      <%= f.text_area(:description,class: "form-control",rows: "6", placeholder: "Album Description") %>
+                    </div>
+                  </div>
+
+
+
+              </div>
+
+              <div class="row">
+                <div class="col images">
+
+
+
+                  <% if @album.pics.any? %>
+                    <div id="images">
+                      <% @album.pics.each do |pic| %>
+                        <div id="pic-<%= pic.id %>" class="image">
+                           <%= link_to pic, method: :delete,
+
+                                            class: "delete-image",
+                                            remote: true,
+                                            title: "Delete Image" do %>
+                              <img class="close m-1" src="/assets/cl.png" style="width:30px; height: 30px" />
+                            <% end %>
+                          <%= image_tag pic.image.url(:medium), style: "height: 180px;width:180px" %>
+                        </div>
+                      <% end %>
+                    </div>
+                  <% end %>
+                   <div id="image-preview"></div>
+                  <div class="upload-btn-wrapper mt-2 float-left">
+                   <button class="btn"><img src="/assets/plus.png">
+                    <%= f.input " " do %>
+                      <%= file_field_tag "images[]", type: :file, multiple: true %>
+                    <% end %>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mt-5 m-1">
+                <%= f.submit 'Saving', class: 'btn mr-2', type: "submit", value:"Save"%>
+              <%if @album.pics.any? %>
+                <%= link_to "Delete", album_path(@album), class: "a btn ml-2",
+                                            type: "button",
+                                           method: :delete,
+                                         data: { confirm: 'Are you sure ?' } %>
+
+              <% end %>
+
+              </div>
+
+            </div>
+<% end %>
