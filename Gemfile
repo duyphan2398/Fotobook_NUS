@@ -77,7 +77,7 @@ gem 'toastr-rails','>= 1.0.3'
 
 gem 'paperclip', '~> 6.1'
 # Forms
-gem 'simple_form', '~> 4.1'
+gem 'simple_form', '~> 5.0'
 #
 gem 'rails-ujs', '~> 5.1.0.beta1'
 #
